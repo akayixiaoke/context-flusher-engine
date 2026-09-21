@@ -139,7 +139,7 @@ def prune_tool_results_lightweight(
                 lines = content.splitlines()
                 first_line = lines[0][:100] if lines else ""
                 char_count = len(content)
-                m["content"] = f"[Executed: output pruned ({char_count:,} chars to preserve VRAM). Preview: {first_line}...]"
+                m["content"] = f"[Executed: output pruned ({char_count:,} chars). Result recorded in archive. Preview: {first_line}...]"
                 pruned_count += 1
 
         new_messages.append(m)

@@ -373,7 +373,7 @@ class ContextFlusher:
             if pending_tools:
                 logger.warning(
                     "EMERGENCY ESCAPE HATCH: ~%s tokens >= hard ceiling (%s) with unclosed tool calls %s. "
-                    "Injecting emergency stubs to prevent OOM crash.",
+                    "Injecting emergency stubs to prevent context window overflow.",
                     f"{current_tokens:,}",
                     f"{self.hard_ceiling:,}",
                     pending_tools,
@@ -532,7 +532,7 @@ class ContextFlusher:
             f" [Context Shift]   ~{before:,} -> ~{after:,} tokens (Freed {freed:,} tokens, -{ratio})",
             f" [Disk Guarantee]  100% full logs, diffs & tools written to: {archive}",
             " [Preserved]       System prompt (Prefix Cache safe), latest dialogue tail, checkpoint marker",
-            " [Flushed]         Intermediate raw tool execution buffers (GPU KV cache released)",
+            " [Flushed]         Intermediate raw tool execution buffers (attention compute & context budget reclaimed)",
             "========================================================================",
         ]
         return "\n".join(lines)
