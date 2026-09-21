@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "context-flusher"
+version = "0.1.0"
+description = "High-performance, task-aware KV cache flushing and zero-LLM context management middleware for local LLM agents."
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+authors = [
+    { name = "Context Flusher Contributors" }
+]
+keywords = ["llm", "agent", "kv-cache", "context-management", "llama-cpp", "ollama", "vllm"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+dependencies = [
+    "pyyaml>=6.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/your-username/context-flusher"
+Repository = "https://github.com/your-username/context-flusher"

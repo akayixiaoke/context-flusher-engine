@@ -1,0 +1,56 @@
+# ==============================================================================
+# Context-Flusher Configuration Template
+# ==============================================================================
+
+# Workspace directory where task archives and progress files will be stored.
+# Can also be overridden by environment variable CONTEXT_FLUSHER_WORKSPACE.
+workspace_dir: "./workspace"
+
+# Parameter Precedence Order:
+# Explicit Arguments > Environment Variables > Config File > Presets/Defaults
+
+# Preset profile selection (optional):
+# Presets are strictly token-based context window budgets (independent of physical GPU vendor):
+# - "8k":   active_threshold: 8000,  hard_ceiling: 14000 (Ideal for n_ctx=8k or smaller budgets)
+# - "16k":  active_threshold: 16000, hard_ceiling: 28000 (Balanced coding agents)
+# - "32k":  active_threshold: 32000, hard_ceiling: 60000 (Default standard for 32k+ windows)
+# - "64k":  active_threshold: 64000, hard_ceiling: 120000 (High-capacity long-horizon tasks)
+# - "custom": Use custom values in the thresholds section below
+preset: "32k"
+
+# Context token thresholds (Fully user-tunable)
+# When set explicitly in this config, these values override the preset above.
+# If server n_ctx is detected to be smaller than hard_ceiling, the engine automatically
+# clamps hard_ceiling to 90% n_ctx and equal-ratio scales active_threshold.
+thresholds:
+  # Active soft threshold (in tokens).
+  # Compaction is strictly deferred while tool calls are in-flight (Iron Law),
+  # and triggers only upon clean turn completion.
+  active_threshold: 32000
+
+  # Hard ceiling threshold (in tokens).
+  # Acts as the ultimate hardware guard. If hit with hung/unreturned tool calls,
+  # the Emergency Escape Hatch activates with identified tool stubs and RED audit diff.
+  hard_ceiling: 60000
+
+# Archiving strategy
+archiver:
+  # Enable automatic Markdown archiving on turn completion
+  enabled: true
+  # Subdirectory inside workspace_dir to store individual task archives
+  archives_subdir: "archives"
+  # Name of the cumulative roadmap and milestone file
+  progress_filename: "TASK_PROGRESS.md"
+  # Max number of recent tool actions to summarize in the archive header
+  max_tool_history_steps: 15
+
+# Context reset & KV cache reclamation strategy
+context_reset:
+  # Number of recent clean dialogue turns (user + assistant) to retain
+  keep_tail_turns: 1
+  # Minimum character count to consider a tool output candidate for pruning
+  min_prune_chars: 500
+  # Automatically inject a checkpoint notice so the agent knows where past state lives
+  inject_checkpoint_notice: true
+  # Print reconciliation diff report to stdout by default on each flush
+  print_diff_by_default: true
